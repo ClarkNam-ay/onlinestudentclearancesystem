@@ -1,0 +1,7 @@
+.dropdown-item:hover {
+    color: #fff !important;        
+    background-color: #001f3f !important; 
+    border-color: #001f3f !important; 
+    border-color: white !important;
+    border-width: 2px !important;
+  }
