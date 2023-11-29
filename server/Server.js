@@ -48,6 +48,23 @@ app.post('/StudentLogin', (req, res) => {
     })
 })
 
+app.get('/adminhome', (req, res) => {
+    const sql = "SELECT * FROM registerstudent"
+    dbStudentRegister.query(sql, (err, result) => {
+        if(err) return res.json({Message: "Error inside server"});
+        return res.json(result);
+    })
+})
+
+app.delete('/adminhome/delete/:id', (req, res) => {
+    const sql = 'DELETE FROM registerstudent WHERE id=?';
+    const id = req.params.id;
+    dbStudentRegister.query(sql, [id], (err, result) => {
+        if(err) return res.json({Message: "Error inside server"});
+        return res.json(result);
+    })
+})
+
 //SigneeRegister Database
 const dbSigneeRegister = mysql.createConnection({
     host: "localhost",
