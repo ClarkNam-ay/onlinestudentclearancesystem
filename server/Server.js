@@ -105,6 +105,23 @@ app.post('/SigneeLogin', (req, res) => {
     })
 })
 
+app.get('/viewsigneeaccount', (req, res) => {
+    const sql = "SELECT * FROM registersignee"
+    dbSigneeRegister.query(sql, (err, result) => {
+        if(err) return res.json({Message: "Error inside server"});
+        return res.json(result);
+    })
+})
+
+app.delete('/viewsigneeaccount/delete/:id', (req, res) => {
+    const sql = 'DELETE FROM registersignee WHERE id=?';
+    const id = req.params.id;
+    dbSigneeRegister.query(sql, [id], (err, result) => {
+        if(err) return res.json({Message: "Error inside server"});
+        return res.json(result);
+    })
+})
+
 //AdminRegister Database
 const dbAdminRegister = mysql.createConnection({
     host: "localhost",
