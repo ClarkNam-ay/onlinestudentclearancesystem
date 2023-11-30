@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import AdminNav from '../adminnav'
+import AdminNav from './adminnav'
 import axios from 'axios'
-import '../adminhome.css'
+import './adminhome.css'
 
 
 function Viewstudentaccount({Toggle}) {

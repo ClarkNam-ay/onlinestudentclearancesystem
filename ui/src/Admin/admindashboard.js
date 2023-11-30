@@ -1,16 +1,24 @@
 import React, { useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import { Link } from 'react-router-dom'
 import '../Student/style.css'
-import AdminHome from './adminhome'
 import { Icon } from 'react-icons-kit'
 import {userCircleO} from 'react-icons-kit/fa/userCircleO'
 
+import SetSignee from './setsignee'
+import StudentAccount from './viewstudentaccount'
+import SigneeAccount from './viewsigneeaccount'
+
 function Admindashboard() {
-  const [toggle, setToggle] = useState(true)
+    const [selectedView, setSelectedView] = useState(null);
+    const [toggle, setToggle] = useState(true)
     const Toggle = () => {
         setToggle(!toggle)
-    }
+    };
+
+    const handleButtonClick = (view) => {
+        setSelectedView(view);
+      };
+
   return (
     <>
     <div className='container-fluid min-vh-100' style={{ background: 'linear-gradient(to bottom, #87ceeb, #4682b4)'}}>
@@ -23,20 +31,27 @@ function Admindashboard() {
                     </div>
                     <hr className='text-dark' />
                     <div className='list-group list-group-flush'>
-                        <Link to='' className='list-group-item py-2'>
-                            <i className='bi bi-send-fill fs-5 me-3'></i>
-                            <span>View Account</span> 
-                        </Link>
-                        <Link to='' className='list-group-item py-2'>
+                        <button onClick={() => handleButtonClick('setsignee')} className='list-group-item py-2'>
                             <i className='bi bi-send-fill fs-5 me-3'></i>
                             <span>Set Signee</span> 
-                        </Link>
+                        </button>
+                        <button onClick={() => handleButtonClick('studentaccount')} className='list-group-item py-2'>
+                            <i className='bi bi-send-fill fs-5 me-3'></i>
+                            <span>Student Account</span> 
+                        </button>
+                        <button onClick={() => handleButtonClick('signeeaccount')} className='list-group-item py-2'>
+                            <i className='bi bi-send-fill fs-5 me-3'></i>
+                            <span>Signee Account</span> 
+                        </button>
                     </div>
                 </div>
             </div>}
             {toggle && <div className='col-4 col-md-2'></div>}
             <div className='col'>
-                <AdminHome Toggle={Toggle}/>
+                {selectedView === 'setsignee' && <SetSignee Toggle={Toggle}/>}
+                {selectedView === 'studentaccount' && <StudentAccount Toggle={Toggle}/>}
+                {selectedView === 'signeeaccount' && <SigneeAccount Toggle={Toggle}/>}
+                {!selectedView && <SetSignee Toggle={Toggle} />}
             </div>
         </div>
     </div>

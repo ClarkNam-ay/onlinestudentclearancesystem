@@ -10,8 +10,7 @@ import Adminregister from './Admin/adminregister';
 import Studentdashboard from './Student/studentdashboard';
 import SigneeDashboard from './Signee/signeedashboard'
 import AdminDashboard from './Admin/admindashboard'
-import ViewStudentAccount from './Admin/ViewAccount/viewstudentaccount'
-import DashViewStud from './Admin/ViewAccount/dashviewstudentacc'
+import ViewStudentAccount from './Admin/viewstudentaccount'
 
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
       <Route path="/signeedashboard" element={<SigneeDashboard />}></Route>
       <Route path="/admindashboard" element={<AdminDashboard />}></Route>
       <Route path="/viewstudentaccount" element={<ViewStudentAccount />}></Route>
-      <Route path="/dashviewstudentacc" element={<DashViewStud />}></Route>
     </Routes>
   </BrowserRouter>
   )
