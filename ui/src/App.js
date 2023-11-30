@@ -11,6 +11,8 @@ import Studentdashboard from './Student/studentdashboard';
 import ViewClearanceStatus from './Student/viewclearancestatus'
 import SigneeDashboard from './Signee/signeedashboard'
 import AdminDashboard from './Admin/admindashboard'
+import ViewStudentAccount from './Admin/viewstudentaccount'
+import DashViewStud from './Admin/dashviewstudentacc'
 
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
       <Route path="/viewclearancestatus" element={<ViewClearanceStatus />}></Route>
       <Route path="/signeedashboard" element={<SigneeDashboard />}></Route>
       <Route path="/admindashboard" element={<AdminDashboard />}></Route>
+      <Route path="/viewstudentaccount" element={<ViewStudentAccount />}></Route>
+      <Route path="/dashviewstudentacc" element={<DashViewStud />}></Route>
     </Routes>
   </BrowserRouter>
   )

@@ -1,68 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import AdminNav from './adminnav'
-import axios from 'axios'
 import './adminhome.css'
+import { Link } from 'react-router-dom'
 
 function Adminhome({Toggle}) {
-  const [data, setData] = useState([])
-  useEffect(()=> {
-    axios.get('http://localhost:8082/adminhome')
-    .then(res => setData(res.data))
-    .catch(err => console.log(err));
-  }, [])
-
-  const handleDelete = (id) => {
-    axios.delete('http://localhost:8082/adminhome/delete/'+id)
-    .then(() => {
-      setData(prevData => prevData.filter(item => item.id !== id));
-    })
-    .catch(err => console.log(err));
-  }
-
+  
   return (
     <div className='px-3'>
         <AdminNav Toggle={Toggle}/>
-       
-        <div>
-          <div>
-            <h2 className=" p-3 bg-white">Student Account</h2>
-            <table className="table table-bordered table-striped">
-              <thead className="thead-dark">
-                <tr>
-                  <th>Id</th>
-                  <th>Name</th>
-                  <th>Year Level</th>
-                  <th>Course</th>
-                  <th>Department</th>
-                  <th>Email</th>
-                  <th>Username</th>
-                  {/* <th>Password</th> */}
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((registerstudent, index) => {
-                  return <tr key={index}>
-                      <td>{registerstudent.id}</td>
-                      <td>{registerstudent.name}</td>
-                      <td>{registerstudent.year_level}</td>
-                      <td>{registerstudent.course}</td>
-                      <td>{registerstudent.department}</td>
-                      <td>{registerstudent.email}</td>
-                      <td>{registerstudent.username}</td>
-                      {/* <td>{registerstudent.password}</td>*/}
-                      <td>
-                        <button className="btn btn-danger custom-button">Block</button>
-                        <button className="btn btn-success custom-button">Unblock</button>
-                        <button onClick={ () => handleDelete(registerstudent.id)} className="btn btn-warning custom-button">Delete</button>
-                      </td>
-                  </tr>
-                })}
-              </tbody>
-            </table>
+        <div className='container-fluid'>
+          <div className='row g-3 my-2'>
+            <div className='col-md-3'>
+              <div className='p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded'>
+                <div>
+                  <Link to="/dashviewstudentacc" style={{textDecoration: 'none', color: 'black'}}><h3 className='fs-2'>Student Account</h3>
+                  <p className='fs-5'>16 Accounts</p></Link>
+                </div>
+               {/*<i className='bi bi-mortarboard-fill  p-3 fs-1'></i>*/}
+              </div>
+            </div>
+
+            <div className='col-md-3'>
+              <div className='p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded'>
+                <div>
+                  <Link to="/dashviewstudentacc" style={{textDecoration: 'none', color: 'black'}}><h3 className='fs-2'>Student Account</h3>
+                  <p className='fs-5'>16 Accounts</p></Link>
+                </div>
+               {/*<i className='bi bi-mortarboard-fill  p-3 fs-1'></i>*/}
+              </div>
+            </div>
           </div>
-        </div>
-          
+        </div>            
     </div>
   )
 }
