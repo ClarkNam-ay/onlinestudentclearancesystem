@@ -1,7 +1,7 @@
 import React from 'react'
 import Studentnav from './studentnav'
 
-function viewcleartable({Toggle}) {
+function printclearance({Toggle}) {
   return (
     <div className='px-3'>
         <Studentnav Toggle={Toggle}/>
@@ -20,7 +20,7 @@ function viewcleartable({Toggle}) {
         </div>
         
           <table className="table caption-top bg-white rounded mt-2">
-            <caption className='text-white fs-4'>Clearance Status</caption>
+            <caption className='text-white fs-4'>Print Clearance</caption>
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -53,4 +53,4 @@ function viewcleartable({Toggle}) {
   )
 }
 
-export default viewcleartable
+export default printclearance

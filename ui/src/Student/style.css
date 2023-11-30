@@ -1,4 +1,4 @@
-.list-group a:hover {
+.list-group button:hover {
     background-color: #001f3f;
     color: white;
     cursor: pointer;

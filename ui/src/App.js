@@ -8,11 +8,10 @@ import Studentregister from './Student/studentregister';
 import Signeeregister from './Signee/signeeregister';
 import Adminregister from './Admin/adminregister';
 import Studentdashboard from './Student/studentdashboard';
-import ViewClearanceStatus from './Student/viewclearancestatus'
 import SigneeDashboard from './Signee/signeedashboard'
 import AdminDashboard from './Admin/admindashboard'
-import ViewStudentAccount from './Admin/viewstudentaccount'
-import DashViewStud from './Admin/dashviewstudentacc'
+import ViewStudentAccount from './Admin/ViewAccount/viewstudentaccount'
+import DashViewStud from './Admin/ViewAccount/dashviewstudentacc'
 
 
 function App() {
@@ -27,7 +26,6 @@ function App() {
       <Route path="/signeeregister" element={<Signeeregister />}></Route>
       <Route path="/adminregister" element={<Adminregister />}></Route>
       <Route path="/studentdashboard" element={<Studentdashboard />}></Route>
-      <Route path="/viewclearancestatus" element={<ViewClearanceStatus />}></Route>
       <Route path="/signeedashboard" element={<SigneeDashboard />}></Route>
       <Route path="/admindashboard" element={<AdminDashboard />}></Route>
       <Route path="/viewstudentaccount" element={<ViewStudentAccount />}></Route>

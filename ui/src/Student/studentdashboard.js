@@ -1,14 +1,23 @@
 import React, { useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import { Link } from 'react-router-dom'
 import './style.css'
-import Studenthome from './studenthome'
+
+import ViewClearStat from './viewcleartable'
+import PrintClearance from './printclearance'
+import SubmitClearReq from './studenthome'
+
 
 function Studentdashboard() {
+    const [selectedView, setSelectedView] = useState(null);
     const [toggle, setToggle] = useState(true)
     const Toggle = () => {
         setToggle(!toggle)
-    }
+    };
+
+    const handleButtonClick = (view) => {
+        setSelectedView(view);
+      };
+
   return (
     <>
     <div style={{backgroundColor: '#87ceeb'}} className='container-fluid min-vh-100'>
@@ -21,20 +30,28 @@ function Studentdashboard() {
                     </div>
                     <hr className='text-dark' />
                     <div className='list-group list-group-flush'>
-                        <Link to='' className='list-group-item py-2'>
+                        <button onClick={() => handleButtonClick('submitClearance')} className='list-group-item py-2'>
                             <i className='bi bi-send-fill fs-5 me-3'></i>
                             <span>Submit Clearance Request</span>
-                        </Link>
-                        <Link to='/viewclearancestatus' className='list-group-item py-2'>
+                        </button>
+                        <button onClick={() => handleButtonClick('viewClearanceStatus')} className='list-group-item py-2'>
                             <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
                             <span>View Clearance Status</span>
-                        </Link>
+                        </button>
+                        <button onClick={() => handleButtonClick('printClearance')} className='list-group-item py-2'>
+                            <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
+                            <span>Print Clearance</span>
+                        </button>
                     </div>
                 </div>
             </div>}
             {toggle && <div className='col-4 col-md-2'></div>}
             <div className='col'>
-                <Studenthome Toggle={Toggle}/>
+                 {/* Render the selected view based on the state */}
+            {selectedView === 'viewClearanceStatus' && <ViewClearStat Toggle={Toggle}/>}
+            {selectedView === 'printClearance' && <PrintClearance Toggle={Toggle}/>}
+            {selectedView === 'submitClearance' && <SubmitClearReq Toggle={Toggle}/>}
+            {!selectedView && <SubmitClearReq Toggle={Toggle} />}
             </div>
         </div>
     </div>

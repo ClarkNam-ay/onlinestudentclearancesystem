@@ -1,40 +1,44 @@
 import React, { useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { Link } from 'react-router-dom'
-import './style.css'
-import ViewClearTable from './viewcleartable'
+import '../../Student/style.css'
+import ViewStudentAccount from './viewstudentaccount'
+import { Icon } from 'react-icons-kit'
+import {userCircleO} from 'react-icons-kit/fa/userCircleO'
 
-function Studentdashboard() {
+function Dashviewstudentacc() {
+
     const [toggle, setToggle] = useState(true)
     const Toggle = () => {
         setToggle(!toggle)
     }
+
   return (
     <>
-    <div style={{backgroundColor: '#87ceeb'}} className='container-fluid min-vh-100'>
+    <div className='container-fluid min-vh-100' style={{ background: 'linear-gradient(to bottom, #87ceeb, #4682b4)'}}>
         <div className='row'>
             {toggle && <div className='col-4 col-md-2 bg-white vh-100 position-fixed'>
                 <div className='bg-white sidebar p-2'>
                     <div className='m-2'>
-                        <i className='bi bi-mortarboard-fill  me-3 fs-4'></i>
-                        <span className='brand-name fs-4'>Student</span>
+                    <Icon icon={userCircleO} size={32} className='me-3 fs-4' />
+                        <span className='brand-name fs-4'>Admin</span>
                     </div>
                     <hr className='text-dark' />
                     <div className='list-group list-group-flush'>
-                        <Link to='/studentdashboard' className='list-group-item py-2'>
+                        <Link to='/admindashboard' className='list-group-item py-2'>
                             <i className='bi bi-send-fill fs-5 me-3'></i>
-                            <span>Submit Clearance Request</span>
+                            <span>View Account</span> 
                         </Link>
                         <Link to='' className='list-group-item py-2'>
-                            <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
-                            <span>View Clearance Status</span>
+                            <i className='bi bi-send-fill fs-5 me-3'></i>
+                            <span>Set Signee</span> 
                         </Link>
                     </div>
                 </div>
             </div>}
             {toggle && <div className='col-4 col-md-2'></div>}
             <div className='col'>
-                <ViewClearTable Toggle={Toggle}/>
+                <ViewStudentAccount Toggle={Toggle}/>
             </div>
         </div>
     </div>
@@ -45,4 +49,4 @@ function Studentdashboard() {
   )
 }
 
-export default Studentdashboard
+export default Dashviewstudentacc
