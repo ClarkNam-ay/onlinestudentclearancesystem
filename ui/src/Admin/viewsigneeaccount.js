@@ -5,7 +5,13 @@ import axios from 'axios'
 function Viewsigneeaccount({Toggle}) {
 
   const [data, setData] = useState([])
+
   useEffect(()=> {
+
+    // Load data from local storage on component mount
+    const storedData = JSON.parse(localStorage.getItem('selectedData')) || [];
+    setSelectedData(storedData);
+
     axios.get('http://localhost:8082/viewsigneeaccount')
     .then(res => setData(res.data))
     .catch(err => console.log(err));
@@ -19,6 +25,17 @@ function Viewsigneeaccount({Toggle}) {
     .catch(err => console.log(err));
   }
 
+  const [successMessage, setSuccessMessage] = useState('');
+  const [selectedData, setSelectedData] = useState([]);
+  const handleSelect = (registersignee) => {
+    // Move the selected signee to another table
+    const updatedSelectedData = [...selectedData, registersignee];
+    setSelectedData(updatedSelectedData);
+
+    localStorage.setItem('selectedData', JSON.stringify(updatedSelectedData));
+    setSuccessMessage('Signee successfully set!');
+  };
+
   return (
     <div className='px-3'>
         <AdminNav Toggle={Toggle}/>
@@ -26,6 +43,7 @@ function Viewsigneeaccount({Toggle}) {
         <div>
             <div>
                 <h2 className=" p-3 bg-white">Signee Account</h2>
+                {successMessage && <p className="text-success">{successMessage}</p>}
                 <table className="table table-bordered table-striped">
               <thead className="thead-dark">
                 <tr>
@@ -51,6 +69,7 @@ function Viewsigneeaccount({Toggle}) {
                         <button className="btn btn-danger custom-button">Block</button>
                         <button className="btn btn-success custom-button">Unblock</button>
                         <button onClick={ () => handleDelete(registersignee.id)} className="btn btn-warning custom-button">Delete</button>
+                        <button onClick={ () => handleSelect(registersignee)} className="btn btn-success custom-button">Set Signee</button>
                       </td>
                   </tr>
                 })}
@@ -59,7 +78,6 @@ function Viewsigneeaccount({Toggle}) {
             </div>
         </div>
 
-        
     </div>
   )
 }
