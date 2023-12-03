@@ -7,7 +7,6 @@ function Viewsigneeaccount({Toggle}) {
   const [data, setData] = useState([])
 
   useEffect(()=> {
-
     // Load data from local storage on component mount
     const storedData = JSON.parse(localStorage.getItem('selectedData')) || [];
     setSelectedData(storedData);
@@ -25,15 +24,40 @@ function Viewsigneeaccount({Toggle}) {
     .catch(err => console.log(err));
   }
 
-  const [successMessage, setSuccessMessage] = useState('');
   const [selectedData, setSelectedData] = useState([]);
   const handleSelect = (registersignee) => {
+    
+    // Check if the signee is already selected
+    if (!selectedData.find(item => item.id === registersignee.id)) {
+
     // Move the selected signee to another table
     const updatedSelectedData = [...selectedData, registersignee];
     setSelectedData(updatedSelectedData);
 
     localStorage.setItem('selectedData', JSON.stringify(updatedSelectedData));
-    setSuccessMessage('Signee successfully set!');
+    }
+  };
+      //Block Function
+  const handleBlock = (id) => {
+    // You can customize the endpoint and request type based on your backend API
+    axios.put('http://localhost:8082/viewsigneeaccount/block/'+id)
+      .then(() => {
+        setData(prevData => {
+          // Update the data, marking the specific item as blocked
+          return prevData.map(item => (item.id === id ? { ...item, blocked: true } : item));
+        });
+      })
+      .catch(err => console.log(err));
+  };
+      //Unblock Function
+  const handleUnblock = (id) => {
+    axios.put('http://localhost:8082/viewsigneeaccount/unblock/'+id)
+      .then(() => {
+        setData(prevData => {
+          return prevData.map(item => (item.id === id ? { ...item, blocked: false } : item));
+        });
+      })
+      .catch(err => console.log(err));
   };
 
   return (
@@ -43,7 +67,6 @@ function Viewsigneeaccount({Toggle}) {
         <div>
             <div>
                 <h2 className=" p-3 bg-white">Signee Account</h2>
-                {successMessage && <p className="text-success">{successMessage}</p>}
                 <table className="table table-bordered table-striped">
               <thead className="thead-dark">
                 <tr>
@@ -58,6 +81,9 @@ function Viewsigneeaccount({Toggle}) {
               </thead>
               <tbody>
                 {data.map((registersignee, index) => {
+                  //Assigned Function
+                  const isAssigned = selectedData.find(item => item.id === registersignee.id);
+                  const isBlocked = registersignee.blocked; // Check if the item is blocked
                   return <tr key={index}>
                       <td>{registersignee.id}</td>
                       <td>{registersignee.name}</td>
@@ -66,10 +92,29 @@ function Viewsigneeaccount({Toggle}) {
                       <td>{registersignee.username}</td>
                       {/* <td>{registersignee.password}</td>*/}
                       <td>
-                        <button className="btn btn-danger custom-button">Block</button>
-                        <button className="btn btn-success custom-button">Unblock</button>
+                      {/*Mao ni para sa button nga para blocked */}
+                      <button
+                        className={`btn ${isBlocked ? 'btn-success' : 'btn-danger'} custom-button`}
+                        onClick={() => (isBlocked ? handleUnblock(registersignee.id) : handleBlock(registersignee.id))}
+                      >
+                        {isBlocked ? 'Unblock' : 'Block'}
+                      </button>
+
+                      {/*Mao ni para sa button nga para delete */}
                         <button onClick={ () => handleDelete(registersignee.id)} className="btn btn-warning custom-button">Delete</button>
-                        <button onClick={ () => handleSelect(registersignee)} className="btn btn-success custom-button">Set Signee</button>
+                     
+                     {/*Mao ni para sa button nga mahimong assigned */}
+                        {isAssigned ? (
+                            <span className="text-success">Assigned</span>
+                          ) : (
+                            <button
+                              onClick={() => handleSelect(registersignee)}
+                              className="btn btn-primary custom-button"
+                            >
+                              Set Signee
+                            </button>
+                          )}
+
                       </td>
                   </tr>
                 })}

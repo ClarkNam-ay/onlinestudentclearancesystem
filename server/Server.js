@@ -97,8 +97,14 @@ app.post('/SigneeLogin', (req, res) => {
         if(err) {
             return res.json("Error");
         }
-        if(data.length > 0) {
-            return res.json("Success");
+        if (data.length > 0) {
+            const signee = data[0];
+            //Para ma blocked na gyud ang account
+            if (signee.blocked) {
+                return res.json("Blocked");
+            } else {
+                return res.json("Success");
+            }
         } else {
             return res.json("Failed");
         }
@@ -121,6 +127,47 @@ app.delete('/viewsigneeaccount/delete/:id', (req, res) => {
         return res.json(result);
     })
 })
+
+//Bag-o nakong gibutang
+app.put('/viewsigneeaccount/block/:id', (req, res) => {
+    const { id } = req.params;
+    const sqlGetSignee = 'SELECT * FROM registersignee WHERE id=?';
+    const sqlUpdateStatus = 'UPDATE registersignee SET blocked=? WHERE id=?';
+
+    dbSigneeRegister.query(sqlGetSignee, [id], (err, result) => {
+        if (err) {
+            return res.json({ Message: "Error inside server" });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ Message: 'Signee not found' });
+        }
+
+        const newBlockedStatus = !result[0].blocked;
+
+        dbSigneeRegister.query(sqlUpdateStatus, [newBlockedStatus, id], (err, updateResult) => {
+            if (err) {
+                return res.json({ Message: "Error inside server" });
+            }
+
+            return res.json({ Message: 'Signee blocked/unblocked successfully' });
+        });
+    });
+});
+
+app.put('/viewsigneeaccount/unblock/:id', (req, res) => {
+    const { id } = req.params;
+    const sqlUpdateStatus = 'UPDATE registersignee SET blocked=? WHERE id=?';
+
+    dbSigneeRegister.query(sqlUpdateStatus, [false, id], (err, updateResult) => {
+        if (err) {
+            return res.json({ Message: "Error inside server" });
+        }
+
+        return res.json({ Message: 'Signee unblocked successfully' });
+    });
+});
+
 
 //AdminRegister Database
 const dbAdminRegister = mysql.createConnection({
