@@ -40,8 +40,14 @@ app.post('/StudentLogin', (req, res) => {
         if(err) {
             return res.json("Error");
         }
-        if(data.length > 0) {
-            return res.json("Success");
+        if (data.length > 0) {
+            const student = data[0];
+            //Para ma blocked na gyud ang account
+            if (student.blocked) {
+                return res.json("Blocked");
+            } else {
+                return res.json("Success");
+            }
         } else {
             return res.json("Failed");
         }
@@ -64,6 +70,47 @@ app.delete('/adminhome/delete/:id', (req, res) => {
         return res.json(result);
     })
 })
+
+//Bag-o nakong gibutang
+app.put('/viewstudentaccount/block/:id', (req, res) => {
+    const { id } = req.params;
+    const sqlGetStudent = 'SELECT * FROM registerstudent WHERE id=?';
+    const sqlUpdateStatus = 'UPDATE registerstudent SET blocked=? WHERE id=?';
+
+    dbStudentRegister.query(sqlGetStudent, [id], (err, result) => {
+        if (err) {
+            return res.json({ Message: "Error inside server" });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ Message: 'Student not found' });
+        }
+
+        const newBlockedStatus = !result[0].blocked;
+
+        dbStudentRegister.query(sqlUpdateStatus, [newBlockedStatus, id], (err, updateResult) => {
+            if (err) {
+                return res.json({ Message: "Error inside server" });
+            }
+
+            return res.json({ Message: 'Student blocked/unblocked successfully' });
+        });
+    });
+});
+
+app.put('/viewstudentaccount/unblock/:id', (req, res) => {
+    const { id } = req.params;
+    const sqlUpdateStatus = 'UPDATE registerstudent SET blocked=? WHERE id=?';
+
+    dbStudentRegister.query(sqlUpdateStatus, [false, id], (err, updateResult) => {
+        if (err) {
+            return res.json({ Message: "Error inside server" });
+        }
+
+        return res.json({ Message: 'Student unblocked successfully' });
+    });
+});
+
 
 //SigneeRegister Database
 const dbSigneeRegister = mysql.createConnection({

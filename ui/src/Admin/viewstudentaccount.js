@@ -21,6 +21,29 @@ function Viewstudentaccount({Toggle}) {
     .catch(err => console.log(err));
   }
 
+  //Block Function
+  const handleBlock = (id) => {
+    // You can customize the endpoint and request type based on your backend API
+    axios.put('http://localhost:8082/viewstudentaccount/block/'+id)
+      .then(() => {
+        setData(prevData => {
+          // Update the data, marking the specific item as blocked
+          return prevData.map(item => (item.id === id ? { ...item, blocked: true } : item));
+        });
+      })
+      .catch(err => console.log(err));
+  };
+      //Unblock Function
+  const handleUnblock = (id) => {
+    axios.put('http://localhost:8082/viewstudentaccount/unblock/'+id)
+      .then(() => {
+        setData(prevData => {
+          return prevData.map(item => (item.id === id ? { ...item, blocked: false } : item));
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <div className='px-3'>
         <AdminNav Toggle={Toggle}/>
@@ -44,6 +67,7 @@ function Viewstudentaccount({Toggle}) {
               </thead>
               <tbody>
                 {data.map((registerstudent, index) => {
+                  const isBlocked = registerstudent.blocked; // Check if the item is blocked
                   return <tr key={index}>
                       <td>{registerstudent.id}</td>
                       <td>{registerstudent.name}</td>
@@ -54,8 +78,15 @@ function Viewstudentaccount({Toggle}) {
                       <td>{registerstudent.username}</td>
                       {/* <td>{registerstudent.password}</td>*/}
                       <td>
-                        <button className="btn btn-danger custom-button">Block</button>
-                        <button className="btn btn-success custom-button">Unblock</button>
+
+                       {/*Mao ni para sa button nga para blocked */}
+                      <button
+                        className={`btn ${isBlocked ? 'btn-success' : 'btn-danger'} custom-button`}
+                        onClick={() => (isBlocked ? handleUnblock(registerstudent.id) : handleBlock(registerstudent.id))}
+                      >
+                        {isBlocked ? 'Unblock' : 'Block'}
+                      </button>
+
                         <button onClick={ () => handleDelete(registerstudent.id)} className="btn btn-warning custom-button">Delete</button>
                       </td>
                   </tr>
