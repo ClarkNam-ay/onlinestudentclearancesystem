@@ -111,6 +111,23 @@ app.put('/viewstudentaccount/unblock/:id', (req, res) => {
     });
 });
 
+app.get('/get-user/:username', (req, res) => {
+    const { username } = req.params;
+    const sql = "SELECT * FROM registerstudent WHERE `username` = ?";
+    dbStudentRegister.query(sql, [username], (err, data) => {
+      if (err) {
+        return res.json({ error: "Error" });
+      }
+      if (data.length > 0) {
+        const user = data[0];
+        const { email, year_level, department, course, name } = user;
+        return res.json({ username: user.username, email, year_level, department, course, name });
+      } else {
+        return res.json({ error: "User not found" });
+      }
+    });
+  });
+
 
 //SigneeRegister Database
 const dbSigneeRegister = mysql.createConnection({

@@ -12,24 +12,31 @@ import SigneeDashboard from './Signee/signeedashboard'
 import AdminDashboard from './Admin/admindashboard'
 import ViewStudentAccount from './Admin/viewstudentaccount'
 
+import { SigneeDataProvider } from './SigneeDataContext';
+
 
 function App() {
   return (
+    <SigneeDataProvider>
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Frontpage />}></Route>
+
       <Route path="/StudentLogin" element={<StudentLogin />}></Route>
       <Route path="/SigneeLogin" element={<SigneeLogin />}></Route>
       <Route path="/AdminLogin" element={<AdminLogin />}></Route>
+
       <Route path="/studentregister" element={<Studentregister />}></Route>
       <Route path="/signeeregister" element={<Signeeregister />}></Route>
       <Route path="/adminregister" element={<Adminregister />}></Route>
+
       <Route path="/studentdashboard" element={<Studentdashboard />}></Route>
       <Route path="/signeedashboard" element={<SigneeDashboard />}></Route>
       <Route path="/admindashboard" element={<AdminDashboard />}></Route>
       <Route path="/viewstudentaccount" element={<ViewStudentAccount />}></Route>
     </Routes>
   </BrowserRouter>
+  </SigneeDataProvider>
   )
 }
 
