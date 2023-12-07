@@ -14,8 +14,7 @@ import axios from 'axios'
 function Studentdashboard() {
     const { user } = useSigneeData();
     const navigate = useNavigate();
-    const storedUsername = localStorage.getItem('username');
-    const [username, setUsername] = useState(storedUsername || '');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [yearLevel, setYearLevel] = useState('');
     const [department, setDepartment] = useState('');
@@ -37,7 +36,6 @@ function Studentdashboard() {
             setDepartment(department);
             setCourse(course);
             setName(name);
-            localStorage.setItem('username', username);
           }
         } catch (error) {
           console.error('Error fetching user details:', error);

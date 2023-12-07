@@ -7,12 +7,15 @@ import { Icon } from 'react-icons-kit'
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
 import {eye} from 'react-icons-kit/feather/eye'
 
+import { useSigneeData } from '../SigneeDataContext'
+
 function SigneeLogin() {
       const [values, setValues] = useState({
         username:'',
         password:''
     })
 
+    const { login } = useSigneeData();
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({})
@@ -23,11 +26,15 @@ function SigneeLogin() {
         event.preventDefault();
         const err = Validation(values);
         setErrors(err);
+
         if(errors.username === "" && errors.password === "") {
             axios.post('http://localhost:8082/SigneeLogin', values)
             .then(res => {
                 if(res.data === "Success") {
-                    navigate('/signeedashboard');
+                    login(values.username);
+                    const username = values.username;
+                    console.log(username);
+                    navigate('/signeedashboard', { state: { username } });
                 } else {
                     alert("No Record Existed");
                 }

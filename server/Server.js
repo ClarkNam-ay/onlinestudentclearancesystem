@@ -232,6 +232,23 @@ app.put('/viewsigneeaccount/unblock/:id', (req, res) => {
     });
 });
 
+app.get('/get-signee-user/:username', (req, res) => {
+    const { username } = req.params;
+    const sql = "SELECT * FROM registersignee WHERE `username` = ?";
+    dbSigneeRegister.query(sql, [username], (err, data) => {
+      if (err) {
+        return res.json({ error: "Error" });
+      }
+      if (data.length > 0) {
+        const user = data[0];
+        const { email, name, designation } = user;
+        return res.json({ username: user.username, email, name, designation });
+      } else {
+        return res.json({ error: "User not found" });
+      }
+    });
+  });
+
 
 //AdminRegister Database
 const dbAdminRegister = mysql.createConnection({
