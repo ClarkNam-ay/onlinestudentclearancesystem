@@ -7,12 +7,17 @@ import { Icon } from 'react-icons-kit'
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
 import {eye} from 'react-icons-kit/feather/eye'
 
+import { useSigneeData } from '../SigneeDataContext'
+
 function AdminLogin() {
   const [values, setValues] = useState({
     username:'',
     password:''
 })
+
 const navigate = useNavigate();
+const { login } = useSigneeData();
+
 const [errors, setErrors] = useState({})
 const handleInput = (event) => {
   setValues(prev => ({...prev, [event.target.name]: [event.target.value]}))
@@ -21,11 +26,15 @@ const handleSubmit =(event) => {
     event.preventDefault();
     const err = Validation(values);
         setErrors(err);
+
         if(errors.username === "" && errors.password === "") {
             axios.post('http://localhost:8082/AdminLogin', values)
             .then(res => {
                 if(res.data === "Success") {
-                    navigate('/admindashboard');
+                    login(values.username);
+                    const username = values.username;
+                    console.log(username);
+                    navigate('/admindashboard', { state: { username } });
                 } else {
                     alert("No Record Existed");
                 }

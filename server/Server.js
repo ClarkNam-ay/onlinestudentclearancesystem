@@ -287,6 +287,23 @@ app.post('/AdminLogin', (req, res) => {
     })
 })
 
+app.get('/get-admin-user/:username', (req, res) => {
+    const { username } = req.params;
+    const sql = "SELECT * FROM registeradmin WHERE `username` = ?";
+    dbAdminRegister.query(sql, [username], (err, data) => {
+      if (err) {
+        return res.json({ error: "Error" });
+      }
+      if (data.length > 0) {
+        const user = data[0];
+        const { username } = user;
+        return res.json({ username: user.username });
+      } else {
+        return res.json({ error: "User not found" });
+      }
+    });
+  });
+
 //Server para ma gana ang database
 app.listen(8082, ()=> {
     console.log('Listening...');
