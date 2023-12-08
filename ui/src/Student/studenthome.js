@@ -27,7 +27,7 @@ function Studenthome({Toggle}) {
         <Studentnav Toggle={Toggle}/>
         
         <div>
-        <h2>Your Clearance</h2>
+        <h2 className=" p-3 bg-white">Your Clearance</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import '../Student/style.css'
-import { Icon } from 'react-icons-kit'
-import {userCircleO} from 'react-icons-kit/fa/userCircleO'
 
 import SetSignee from './setsignee'
 import StudentAccount from './viewstudentaccount'
@@ -61,7 +59,6 @@ function Admindashboard() {
             {toggle && <div className='col-4 col-md-2 bg-white vh-100 position-fixed'>
                 <div className='bg-white sidebar p-2'>
                     <div className='m-2'>
-                    <Icon icon={userCircleO} size={32} className='me-3 fs-4' />
                     {username && <h2>{username}</h2>}
                     </div>
                     <hr className='text-dark' />

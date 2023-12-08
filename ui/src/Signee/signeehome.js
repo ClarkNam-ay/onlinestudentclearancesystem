@@ -14,7 +14,7 @@ function Signeehome({Toggle}) {
         <SigneeNav Toggle={Toggle}/>
         
         <div>
-      <h2>Signee Dashboard</h2>
+      <h2 className=" p-3 bg-white">Student Request</h2>
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>

@@ -23,7 +23,7 @@ function Setsignee({Toggle}) {
         <AdminNav Toggle={Toggle}/>
 
         <div>
-        <h2>Selected Signee</h2>
+        <h2 className=" p-3 bg-white">Selected Signee</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>
