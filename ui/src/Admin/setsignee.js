@@ -1,21 +1,39 @@
 import React, {useState, useEffect} from 'react'
 import AdminNav from './adminnav'
 import './adminhome.css'
+import axios from 'axios';
 
 
 function Setsignee({Toggle}) {
-  const [selectedData, setSelectedData] = useState([]);
+  const [assignedSignees, setAssignedSignees] = useState([]);
+  
 
   useEffect(() => {
-    // Load data from local storage on component mount
-    const storedData = JSON.parse(localStorage.getItem('selectedData')) || [];
-    setSelectedData(storedData);
+    // Fetch assigned signee for all student accounts
+    axios.get('http://localhost:8082/viewsigneeaccount/assigned/all')
+      .then(response => {
+        // Update state with the assigned signees
+        setAssignedSignees(response.data);
+        console.log('Assigned Signees:', response.data); // Log assigned signees
+      })
+      .catch(error => {
+        // Handle error, e.g., show an error message
+        console.error('Error fetching assigned signees:', error);
+      });
   }, []);
 
-  const handleRemove = (id) => {
-    const updatedSelectedData = selectedData.filter(item => item.id !== id);
-    setSelectedData(updatedSelectedData);
-    localStorage.setItem('selectedData', JSON.stringify(updatedSelectedData));
+  const handleRemove = (assignedSigneeId) => {
+    console.log('Removing signee with ID:', assignedSigneeId);
+    // Send a request to the server to unassign the signee
+    axios.put(`http://localhost:8082/viewsigneeaccount/unassign/${assignedSigneeId}`)
+      .then(response => {
+        // Update state by filtering out the removed signee
+        setAssignedSignees(prevAssignedSignees => prevAssignedSignees.filter(signee => signee.id !== assignedSigneeId));
+        console.log('Signee removed successfully');
+      })
+      .catch(error => {
+        console.error('Error removing signee:', error);
+      });
   };
   
   return (
@@ -23,25 +41,30 @@ function Setsignee({Toggle}) {
         <AdminNav Toggle={Toggle}/>
 
         <div>
-        <h2 className=" p-3 bg-white">Selected Signee</h2>
+        <h2 className="p-3 bg-white">Your Assigned Signees</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>
-              <th>Id</th>
-              <th>Name</th>
+             
+              <th>Signee Name</th>
               <th>Designation</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {selectedData.map((selectedItem, index) => (
-                <tr key={index}>
-                <td>{selectedItem.id}</td>
-                <td>{selectedItem.name}</td>
-                <td>{selectedItem.designation}</td>
+            {assignedSignees.map((assignedSignee, index) => (
+              <tr key={index}>
+                
+                <td>{assignedSignee.name}</td>
+                <td>{assignedSignee.designation}</td>
                 <td>
-                  {/* Add any additional actions for the second table */}
-                  <button onClick={() => handleRemove(selectedItem.id)} className="btn btn-danger custom-button">Remove</button>
+                  {/* Add any additional actions for the table */}
+                  <button
+                    className="btn btn-danger custom-button"
+                    onClick={() => handleRemove(assignedSignee.id)}
+                  >
+                    Remove
+                  </button>
                 </td>
               </tr>
             ))}

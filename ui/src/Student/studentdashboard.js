@@ -66,7 +66,7 @@ function Studentdashboard() {
 
   return (
     <>
-    <div style={{backgroundColor: '#87ceeb'}} className='container-fluid min-vh-100'>
+    <div style={{ background: 'linear-gradient(to bottom, #87ceeb, #4682b4)'}} className='container-fluid min-vh-100'>
         <div className='row'>
             {toggle && <div className='col-4 col-md-2 bg-white vh-100 position-fixed'>
                 <div className='bg-white sidebar p-2'>

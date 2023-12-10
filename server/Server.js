@@ -129,6 +129,7 @@ app.get('/get-user/:username', (req, res) => {
   });
 
 
+
 //SigneeRegister Database
 const dbSigneeRegister = mysql.createConnection({
     host: "localhost",
@@ -136,6 +137,59 @@ const dbSigneeRegister = mysql.createConnection({
     password: "",
     database: "signeeregister"
 });
+
+app.post('/viewsigneeaccount/assign', (req, res) => {
+    const { accountId, signeeId } = req.body;
+
+    // Assuming you have a table named 'accounts' with a column 'assignedSigneeId'
+    const updateAccountSQL = "UPDATE registersignee SET accountSigneeId = ? WHERE id = ?";
+    dbSigneeRegister.query(updateAccountSQL, [signeeId, accountId], (updateAccountErr, updateAccountResult) => {
+        if (updateAccountErr) {
+            return res.status(500).json({ success: false, message: 'Error updating account', error: updateAccountErr });
+        }
+
+        if (updateAccountResult.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Account not found' });
+        }
+
+        return res.json({ success: true, message: 'Signee assigned successfully to the account' });
+    });
+});
+
+app.get('/viewsigneeaccount/assigned/all', (req, res) => {
+    // Assuming you have a database table that tracks assigned signees
+    const sql = "SELECT * FROM registersignee WHERE `accountSigneeId` IS NOT NULL"; // Update with your actual table name
+  
+    // Execute the query to get all assigned signees
+    dbSigneeRegister.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error fetching assigned signees:', err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+  
+      // Respond with the list of assigned signees
+      res.json(result);
+    });
+});
+
+
+  app.put('/viewsigneeaccount/unassign/:id', (req, res) => {
+    const signeeId = req.params.id;
+  
+    // Perform the unassignment logic here, update the database, etc.
+  
+    const sql = 'UPDATE registersignee SET accountSigneeId = NULL WHERE id = ?';
+  
+    dbSigneeRegister.query(sql, [signeeId], (err, result) => {
+      if (err) {
+        console.error('Error unassigning signee:', err);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+      } else {
+        console.log('Signee unassigned successfully');
+        res.json({ success: true, message: 'Signee unassigned successfully' });
+      }
+    });
+  });
 
 //SigneeRegister Database Component
 app.post('/signeeregister', (req, res) => {

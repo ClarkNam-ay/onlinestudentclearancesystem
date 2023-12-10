@@ -15,10 +15,9 @@ function studentnav({Toggle}) {
                     <li className="nav-item dropdown">
                         <Link to='' className="nav-link dropdown-toggle" href="#" id="dropdownId" 
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span className="text-black">Clark</span>
+                            <span className="text-black">Logout</span>
                         </Link>
                         <div className="dropdown-menu" aria-labelledby="dropdownId">
-                            <Link to='' className="dropdown-item" href="#">Profile</Link>
                             <Link to='/StudentLogin' className="dropdown-item" href="#">Logout</Link>
                         </div>
                     </li>

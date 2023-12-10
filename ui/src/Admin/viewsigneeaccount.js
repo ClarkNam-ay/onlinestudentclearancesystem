@@ -3,19 +3,18 @@ import AdminNav from './adminnav'
 import axios from 'axios'
 
 function Viewsigneeaccount({Toggle}) {
-
+  const [selectedData, setSelectedData] = useState([]);
   const [data, setData] = useState([])
 
-  useEffect(()=> {
-    // Load data from local storage on component mount
-    const storedData = JSON.parse(localStorage.getItem('selectedData')) || [];
-    setSelectedData(storedData);
-
+  useEffect(() => {
     axios.get('http://localhost:8082/viewsigneeaccount')
-    .then(res => setData(res.data))
-    .catch(err => console.log(err));
-  }, [])
-
+      .then(res => {
+        // Update the state based on the server response
+        setData(res.data.map(item => ({ ...item, isAssigned: item.isAssigned || false })));
+      })
+      .catch(err => console.log(err));
+  }, []);
+  
   const handleDelete = (id) => {
     axios.delete('http://localhost:8082/viewsigneeaccount/delete/'+id)
     .then(() => {
@@ -24,19 +23,35 @@ function Viewsigneeaccount({Toggle}) {
     .catch(err => console.log(err));
   }
 
-  const [selectedData, setSelectedData] = useState([]);
+
+  
   const handleSelect = (registersignee) => {
-    
     // Check if the signee is already selected
     if (!selectedData.find(item => item.id === registersignee.id)) {
-
-    // Move the selected signee to another table
-    const updatedSelectedData = [...selectedData, registersignee];
-    setSelectedData(updatedSelectedData);
-
-    localStorage.setItem('selectedData', JSON.stringify(updatedSelectedData));
+  
+      // Move the selected signee to another table
+      const updatedSelectedData = [...selectedData, registersignee];
+      setSelectedData(updatedSelectedData);
+  
+      localStorage.setItem('selectedData', JSON.stringify(updatedSelectedData));
+  
+      // Send a request to the server to assign the signee
+      axios.post('http://localhost:8082/viewsigneeaccount/assign', {
+        accountId: registersignee.id,
+        signeeId: registersignee.id,
+      })
+      .then(response => {
+        // Handle success, e.g., show a success message
+        console.log(response.data.message);
+      })
+      .catch(error => {
+        // Handle error, e.g., show an error message
+        console.error('Error assigning signee:', error);
+      });
     }
   };
+  
+
       //Block Function
   const handleBlock = (id) => {
     // You can customize the endpoint and request type based on your backend API
@@ -103,14 +118,12 @@ function Viewsigneeaccount({Toggle}) {
                       {/*Mao ni para sa button nga para delete */}
                         <button onClick={ () => handleDelete(registersignee.id)} className="btn btn-warning custom-button">Delete</button>
                      
-                     {/*Mao ni para sa button nga mahimong assigned */}
-                        {isAssigned ? (
+                     {/* Button to unassign (if assigned) */}
+                          {isAssigned ? (
                             <span className="text-success">Assigned</span>
                           ) : (
-                            <button
-                              onClick={() => handleSelect(registersignee)}
-                              className="btn btn-primary custom-button"
-                            >
+                            // Button to assign (if not assigned)
+                            <button onClick={() => handleSelect(registersignee)} className="btn btn-primary custom-button">
                               Set Signee
                             </button>
                           )}

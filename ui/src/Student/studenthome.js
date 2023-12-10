@@ -1,25 +1,28 @@
 import React, {useState, useEffect} from 'react'
 import Studentnav from './studentnav'
-import { useSigneeData } from '../SigneeDataContext';
+import axios from 'axios';
+
 
 
 function Studenthome({Toggle}) {
-  const { updateRequestingStudents } = useSigneeData();
-  const [selectedData, setSelectedData] = useState([]);
-  const { requestingStudents } = useSigneeData();
+  const [assignedSignees, setAssignedSignees] = useState([]);
+  
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('selectedData')) || [];
-    setSelectedData(storedData);
+    // Fetch assigned signee for all student accounts
+    axios.get('http://localhost:8082/viewsigneeaccount/assigned/all')
+      .then(response => {
+        // Update state with the assigned signees
+        setAssignedSignees(response.data);
+        console.log('Assigned Signees:', response.data); // Log assigned signees
+      })
+      .catch(error => {
+        // Handle error, e.g., show an error message
+        console.error('Error fetching assigned signees:', error);
+      });
   }, []);
 
-  const handleRequest = (index, studentName, signeeName) => {
-    console.log('Student Name:', studentName);
-    console.log('Signee Name:', signeeName);
-  updateRequestingStudents(studentName);
-  console.log('Requesting Students:', requestingStudents); // Log the updated array
-  // Additional logic if needed
-  };
+  
 
 
   return (
@@ -27,25 +30,26 @@ function Studenthome({Toggle}) {
         <Studentnav Toggle={Toggle}/>
         
         <div>
-        <h2 className=" p-3 bg-white">Your Clearance</h2>
+        <h2 className="p-3 bg-white">Your Assigned Signees</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>
+             
               <th>Signee Name</th>
               <th>Designation</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {selectedData.map((selectedItem, index) => (
-                <tr key={index}>
-                <td>{selectedItem.name}</td>
-                <td>{selectedItem.designation}</td>
+            {assignedSignees.map((assignedSignee, index) => (
+              <tr key={index}>
+                
+                <td>{assignedSignee.name}</td>
+                <td>{assignedSignee.designation}</td>
                 <td>
-                  {/* Add any additional actions for the second table */}
+                  {/* Add any additional actions for the table */}
                   <button
                     className="btn btn-primary custom-button"
-                    onClick={() => handleRequest(index, selectedItem.name)}
                   >
                     Request
                   </button>

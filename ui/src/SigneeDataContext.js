@@ -1,4 +1,5 @@
 // SigneeDataContext.js
+
 import React, { createContext, useContext, useState } from 'react';
 
 const SigneeDataContext = createContext();
@@ -19,11 +20,9 @@ export const SigneeDataProvider = ({ children }) => {
     setUser(null);
   };
 
-  const updateRequestingStudents = (studentName) => {
-    setRequestingStudents([...requestingStudents, { name: studentName }]);
+  const updateRequestingStudents = (studentName, signeeName) => {
+    setRequestingStudents([...requestingStudents, { studentName, signeeName }]);
   };
-
-  
 
   return (
     <SigneeDataContext.Provider value={{ requestingStudents, updateRequestingStudents, user, login, logout }}>
