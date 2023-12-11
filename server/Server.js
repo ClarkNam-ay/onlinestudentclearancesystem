@@ -14,6 +14,46 @@ const dbStudentRegister = mysql.createConnection({
     database: "studentregister"
 });
 
+app.get('/signee/requests/pending', (req, res) => {
+    // Assuming you have a table named 'signee_requests' to store requests
+    const selectRequestsQuery = `
+      SELECT registerstudent.name, registerstudent.year_level, registerstudent.course, registerstudent.department
+      FROM registerstudent
+      JOIN studentsignees ON registerstudent.id = studentsignees.studentId
+      WHERE studentsignees.signeeId = ?;
+    `;
+  
+    // Replace '1' with the actual signee ID
+    const signeeId = 10;
+  
+    dbStudentRegister.query(selectRequestsQuery, [signeeId], (err, results) => {
+      if (err) {
+        console.error('Error fetching requested students:', err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+  
+      console.log('Requested students fetched successfully.');
+      return res.status(200).json(results);
+    });
+  });
+
+app.post("/request/signee", (req, res) => {
+    const { studentId, assignedSigneeId } = req.body;
+  
+    // Assuming you have a table named 'signee_requests' to store requests
+    const insertRequestQuery = "INSERT INTO studentsignees (studentId, signeeId) VALUES (?, ?)";
+  
+    dbStudentRegister.query(insertRequestQuery, [studentId, assignedSigneeId], (err, result) => {
+      if (err) {
+        console.error("Error inserting request into the database:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+  
+      console.log("Request inserted successfully.");
+      return res.status(200).json({ success: true });
+    });
+  });
+
 //StudentRegister Database Component
 app.post('/studentregister', (req, res) => {
     const sql = "INSERT INTO registerstudent (`name`,`year_level`,`course`,`department`,`email`,`username`,`password`) Values (?)";
@@ -127,6 +167,8 @@ app.get('/get-user/:username', (req, res) => {
       }
     });
   });
+
+
 
 
 

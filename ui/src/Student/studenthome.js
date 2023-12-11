@@ -9,21 +9,36 @@ function Studenthome({Toggle}) {
   
 
   useEffect(() => {
-    // Fetch assigned signee for all student accounts
     axios.get('http://localhost:8082/viewsigneeaccount/assigned/all')
       .then(response => {
-        // Update state with the assigned signees
         setAssignedSignees(response.data);
-        console.log('Assigned Signees:', response.data); // Log assigned signees
+        console.log('Assigned Signees:', response.data);
       })
       .catch(error => {
-        // Handle error, e.g., show an error message
         console.error('Error fetching assigned signees:', error);
       });
   }, []);
 
+  const handleRequest = (assignedSigneeId) => {
+    console.log(`Requesting signee with ID: ${assignedSigneeId}`);
   
-
+    // Assuming there's an endpoint to handle the request on the server
+    const requestBody = {
+      studentId: 3,
+      assignedSigneeId: assignedSigneeId,
+    };
+  
+    axios.post('http://localhost:8082/request/signee', requestBody)
+      .then(response => {
+        console.log('Request sent successfully:', response.data);
+        // You may want to update the UI or show a notification here
+      })
+      .catch(error => {
+        console.error('Error sending request:', error);
+        // Handle error, update UI, or show an error notification
+      });
+  };
+  
 
   return (
     <div className='px-3'>
@@ -34,7 +49,6 @@ function Studenthome({Toggle}) {
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>
-             
               <th>Signee Name</th>
               <th>Designation</th>
               <th>Action</th>
@@ -47,12 +61,12 @@ function Studenthome({Toggle}) {
                 <td>{assignedSignee.name}</td>
                 <td>{assignedSignee.designation}</td>
                 <td>
-                  {/* Add any additional actions for the table */}
-                  <button
-                    className="btn btn-primary custom-button"
-                  >
-                    Request
-                  </button>
+                <button
+                className="btn btn-primary custom-button"
+                onClick={() => handleRequest(assignedSignee.id)}
+              >
+                Request
+              </button>
                 </td>
               </tr>
             ))}

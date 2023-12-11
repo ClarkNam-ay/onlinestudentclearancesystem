@@ -3,7 +3,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import './style.css'
 import { useNavigate } from 'react-router-dom'
 
-import ViewClearStat from './viewcleartable'
 import PrintClearance from './printclearance'
 import SubmitClearReq from './studenthome'
 
@@ -80,10 +79,6 @@ function Studentdashboard() {
                     </div>
                     <hr className='text-dark' />
                     <div className='list-group list-group-flush'>
-                        <button onClick={() => handleButtonClick('submitClearance')} className='list-group-item py-2'>
-                            <i className='bi bi-send-fill fs-5 me-3'></i>
-                            <span>Submit Clearance Request</span>
-                        </button>
                         <button onClick={() => handleButtonClick('viewClearanceStatus')} className='list-group-item py-2'>
                             <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
                             <span>View Clearance Status</span>
@@ -98,7 +93,6 @@ function Studentdashboard() {
             {toggle && <div className='col-4 col-md-2'></div>}
             <div className='col'>
                  {/* Render the selected view based on the state */}
-            {selectedView === 'viewClearanceStatus' && <ViewClearStat Toggle={Toggle}/>}
             {selectedView === 'printClearance' && <PrintClearance Toggle={Toggle}/>}
             {selectedView === 'submitClearance' && <SubmitClearReq Toggle={Toggle}/>}
             {!selectedView && <SubmitClearReq Toggle={Toggle} />}
