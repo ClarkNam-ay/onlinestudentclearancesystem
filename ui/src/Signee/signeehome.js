@@ -2,21 +2,49 @@ import React, {useState, useEffect} from 'react'
 import SigneeNav from './signeenav'
 import axios from 'axios';
 
+import { useSigneeData } from '../SigneeDataContext'
+
 
 function Signeehome({Toggle}) {
   
   const [pendingRequests, setPendingRequests] = useState([]);
 
+  const { user } = useSigneeData();
+  const [username, setUsername] = useState('');
+  const [id, setId] = useState('');
+
+  console.log('Username:', username);
+  console.log('Id:', id);
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user?.username) {
+          const response = await axios.get('http://localhost:8082/get-signee-user/'+user.username);
+          const { username, id } = response.data;
+          setUsername(username);
+          setId(id);
+        }
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+  
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    const signeeId = id;
     // Fetch pending requests from the server
-    axios.get('http://localhost:8082/signee/requests/pending')
+    axios.get('http://localhost:8082/signee/requests/pending/'+signeeId)
       .then(response => {
         setPendingRequests(response.data);
+        console.log('Server Response:', response.data);
       })
       .catch(error => {
         console.error('Error fetching pending requests:', error);
       });
-  }, []);
+  }, [id]);
 
   const handleApprove = (requestId) => {
     console.log(`Approving request with ID: ${requestId}`);

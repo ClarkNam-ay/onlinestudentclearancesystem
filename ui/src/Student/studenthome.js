@@ -2,10 +2,35 @@ import React, {useState, useEffect} from 'react'
 import Studentnav from './studentnav'
 import axios from 'axios';
 
+import { useSigneeData } from '../SigneeDataContext'
 
 
 function Studenthome({Toggle}) {
   const [assignedSignees, setAssignedSignees] = useState([]);
+
+  const { user } = useSigneeData();
+  const [username, setUsername] = useState('');
+  const [id, setId] = useState('');
+
+  console.log('Username:', username);
+  console.log('Id:', id);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user?.username) {
+          const response = await axios.get('http://localhost:8082/get-user/'+user.username);
+          const { username, id } = response.data;
+          setUsername(username);
+          setId(id);
+        }
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+  
+    fetchData();
+  }, [user]);
   
 
   useEffect(() => {
@@ -24,7 +49,7 @@ function Studenthome({Toggle}) {
   
     // Assuming there's an endpoint to handle the request on the server
     const requestBody = {
-      studentId: 3,
+      studentId: id,
       assignedSigneeId: assignedSigneeId,
     };
   
@@ -45,7 +70,9 @@ function Studenthome({Toggle}) {
         <Studentnav Toggle={Toggle}/>
         
         <div>
-        <h2 className="p-3 bg-white">Your Assigned Signees</h2>
+        
+         
+        <h2 className="p-3 bg-white">Clearance</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>

@@ -14,7 +14,9 @@ const dbStudentRegister = mysql.createConnection({
     database: "studentregister"
 });
 
-app.get('/signee/requests/pending', (req, res) => {
+app.get('/signee/requests/pending/:signeeId', (req, res) => {
+    const signeeId = req.params.signeeId; // Extract signeeId from the request parameters
+
     // Assuming you have a table named 'signee_requests' to store requests
     const selectRequestsQuery = `
       SELECT registerstudent.name, registerstudent.year_level, registerstudent.course, registerstudent.department
@@ -22,9 +24,6 @@ app.get('/signee/requests/pending', (req, res) => {
       JOIN studentsignees ON registerstudent.id = studentsignees.studentId
       WHERE studentsignees.signeeId = ?;
     `;
-  
-    // Replace '1' with the actual signee ID
-    const signeeId = 10;
   
     dbStudentRegister.query(selectRequestsQuery, [signeeId], (err, results) => {
       if (err) {
@@ -160,8 +159,8 @@ app.get('/get-user/:username', (req, res) => {
       }
       if (data.length > 0) {
         const user = data[0];
-        const { email, year_level, department, course, name } = user;
-        return res.json({ username: user.username, email, year_level, department, course, name });
+        const { email, year_level, department, course, name, id } = user;
+        return res.json({ username: user.username, email, year_level, department, course, name, id });
       } else {
         return res.json({ error: "User not found" });
       }
@@ -337,8 +336,8 @@ app.get('/get-signee-user/:username', (req, res) => {
       }
       if (data.length > 0) {
         const user = data[0];
-        const { email, name, designation } = user;
-        return res.json({ username: user.username, email, name, designation });
+        const { email, name, designation, id } = user;
+        return res.json({ username: user.username, email, name, designation, id });
       } else {
         return res.json({ error: "User not found" });
       }
