@@ -56,7 +56,6 @@ function Studenthome({Toggle}) {
       const response = await axios.post('http://localhost:8082/request/signee', requestBody);
       console.log('Request sent successfully:', response.data);
 
-      // Assuming the response includes the status
       const { status } = response.data;
 
       // Update the assignedSignees state with the new status
@@ -67,7 +66,6 @@ function Studenthome({Toggle}) {
       );
     } catch (error) {
       console.error('Error sending request:', error);
-      // Handle error, update UI, or show an error notification
     }
   };
   
@@ -95,7 +93,7 @@ function Studenthome({Toggle}) {
                 
                 <td>{assignedSignee.name}</td>
                 <td>{assignedSignee.designation}</td>
-                <td>{assignedSignee.status || 'Pending'}</td>
+                <td>{assignedSignee.status || 'Not Requested'}</td>
                 <td>
                 <button
                 className="btn btn-primary custom-button"

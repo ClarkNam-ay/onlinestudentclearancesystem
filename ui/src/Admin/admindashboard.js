@@ -21,8 +21,7 @@ function Admindashboard() {
         const fetchData = async () => {
             try {
                 if (user?.username){
-                // Replace 'YOUR_SERVER_ENDPOINT' with your actual server endpoint
-                const response = await axios.get('http://localhost:8082/get-admin-user/'+user.username); // Assuming you have an endpoint to get signee user details
+                const response = await axios.get('http://localhost:8082/get-admin-user/'+user.username); 
                 const { username } = response.data;
                 setUsername(username);
                 }
@@ -38,7 +37,7 @@ function Admindashboard() {
             // Check if the user is logged in
             if (!user || !user.username) {
               // Redirect to login page
-              navigate('/'); // Adjust the route as needed
+              navigate('/'); 
             }
           }, [user, navigate]);
 

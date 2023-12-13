@@ -23,7 +23,6 @@ function Viewstudentaccount({Toggle}) {
 
   //Block Function
   const handleBlock = (id) => {
-    // You can customize the endpoint and request type based on your backend API
     axios.put('http://localhost:8082/viewstudentaccount/block/'+id)
       .then(() => {
         setData(prevData => {
@@ -61,7 +60,6 @@ function Viewstudentaccount({Toggle}) {
                   <th>Department</th>
                   <th>Email</th>
                   <th>Username</th>
-                  {/* <th>Password</th> */}
                   <th>Action</th>
                 </tr>
               </thead>
@@ -76,7 +74,7 @@ function Viewstudentaccount({Toggle}) {
                       <td>{registerstudent.department}</td>
                       <td>{registerstudent.email}</td>
                       <td>{registerstudent.username}</td>
-                      {/* <td>{registerstudent.password}</td>*/}
+                      
                       <td>
 
                        {/*Mao ni para sa button nga para blocked */}

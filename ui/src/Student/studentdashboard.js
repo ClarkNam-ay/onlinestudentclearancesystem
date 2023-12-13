@@ -78,7 +78,7 @@ function Studentdashboard() {
                     <div className='list-group list-group-flush'>
                         <button onClick={() => handleButtonClick('submitClearance')} className='list-group-item py-2'>
                             <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
-                            <span>Clearance Status</span>
+                            <span>Clearance</span>
                         </button>
                     </div>
                 </div>

@@ -23,8 +23,7 @@ function Signeedashboard() {
         const fetchData = async () => {
             try {
                 if (user?.username){
-                // Replace 'YOUR_SERVER_ENDPOINT' with your actual server endpoint
-                const response = await axios.get('http://localhost:8082/get-signee-user/'+user.username); // Assuming you have an endpoint to get signee user details
+                const response = await axios.get('http://localhost:8082/get-signee-user/'+user.username); 
                 const { username, email, name, designation } = response.data;
                 setUsername(username);
                 setEmail(email);
@@ -71,7 +70,7 @@ function Signeedashboard() {
                     <div className='list-group list-group-flush'>
                         <button onClick={() => handleButtonClick('viewclearreq')} className='list-group-item py-2'>
                             <i className='bi bi-send-fill fs-5 me-3'></i>
-                            <span>View Clearance Request</span> 
+                            <span>Clearance Request</span> 
                         </button>
                     </div>
                 </div>

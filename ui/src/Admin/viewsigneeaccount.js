@@ -9,7 +9,6 @@ function Viewsigneeaccount({Toggle}) {
   useEffect(() => {
     axios.get('http://localhost:8082/viewsigneeaccount')
       .then(res => {
-        // Update the state based on the server response
         setData(res.data.map(item => ({ ...item, isAssigned: item.isAssigned || false })));
       })
       .catch(err => console.log(err));
@@ -54,7 +53,6 @@ function Viewsigneeaccount({Toggle}) {
 
       //Block Function
   const handleBlock = (id) => {
-    // You can customize the endpoint and request type based on your backend API
     axios.put('http://localhost:8082/viewsigneeaccount/block/'+id)
       .then(() => {
         setData(prevData => {
@@ -90,7 +88,6 @@ function Viewsigneeaccount({Toggle}) {
                   <th>Designation</th>
                   <th>Email</th>
                   <th>Username</th>
-                  {/* <th>Password</th> */}
                   <th>Action</th>
                 </tr>
               </thead>
@@ -105,9 +102,9 @@ function Viewsigneeaccount({Toggle}) {
                       <td>{registersignee.designation}</td>
                       <td>{registersignee.email}</td>
                       <td>{registersignee.username}</td>
-                      {/* <td>{registersignee.password}</td>*/}
+                      
                       <td>
-                      {/*Mao ni para sa button nga para blocked */}
+                  
                       <button
                         className={`btn ${isBlocked ? 'btn-success' : 'btn-danger'} custom-button`}
                         onClick={() => (isBlocked ? handleUnblock(registersignee.id) : handleBlock(registersignee.id))}

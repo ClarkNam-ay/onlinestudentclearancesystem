@@ -41,7 +41,7 @@ function Setsignee({Toggle}) {
         <AdminNav Toggle={Toggle}/>
 
         <div>
-        <h2 className="p-3 bg-white">Your Assigned Signees</h2>
+        <h2 className="p-3 bg-white">Assigned Signees</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
             <tr>
@@ -58,7 +58,6 @@ function Setsignee({Toggle}) {
                 <td>{assignedSignee.name}</td>
                 <td>{assignedSignee.designation}</td>
                 <td>
-                  {/* Add any additional actions for the table */}
                   <button
                     className="btn btn-danger custom-button"
                     onClick={() => handleRemove(assignedSignee.id)}

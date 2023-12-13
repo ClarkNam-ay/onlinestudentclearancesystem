@@ -18,7 +18,7 @@ const dbStudentRegister = mysql.createConnection({
 app.post('/signee/requests/approve/:signeeId', (req, res) => {
     const requestId = req.params.signeeId;
 
-    const approveRequestQuery = "UPDATE studentsignees SET status = 'approved' WHERE signeeId = ?";
+    const approveRequestQuery = "UPDATE studentsignees SET status = 'Approved' WHERE signeeId = ?";
   
     dbStudentRegister.query(approveRequestQuery, [requestId], (err, result) => {
       if (err) {
@@ -35,7 +35,7 @@ app.post('/signee/requests/approve/:signeeId', (req, res) => {
 app.post('/signee/requests/reject/:signeeId', (req, res) => {
     const requestId = req.params.signeeId;
 
-    const approveRequestQuery = "UPDATE studentsignees SET status = 'reject' WHERE signeeId = ?";
+    const approveRequestQuery = "UPDATE studentsignees SET status = 'Reject' WHERE signeeId = ?";
   
     dbStudentRegister.query(approveRequestQuery, [requestId], (err, result) => {
       if (err) {
@@ -74,7 +74,7 @@ app.get('/signee/requests/pending/:signeeId', (req, res) => {
 app.post("/request/signee", (req, res) => {
     const { studentId, assignedSigneeId } = req.body;
   
-    const insertRequestQuery = "INSERT INTO studentsignees (studentId, signeeId, status) VALUES (?, ?, 'pending')";
+    const insertRequestQuery = "INSERT INTO studentsignees (studentId, signeeId, status) VALUES (?, ?, 'Pending')";
   
     dbStudentRegister.query(insertRequestQuery, [studentId, assignedSigneeId], (err, result) => {
       if (err) {

@@ -54,11 +54,9 @@ function Signeehome({Toggle}) {
     axios.post("http://localhost:8082/signee/requests/approve/"+signeeId)
       .then(response => {
         console.log('Request Approved:', response.data);
-        // You may want to update the UI or show a notification here
       })
       .catch(error => {
         console.error('Error approving request:', error);
-        // Handle error, update UI, or show an error notification
       });
   };
 
@@ -70,11 +68,9 @@ function Signeehome({Toggle}) {
     axios.post("http://localhost:8082/signee/requests/reject/"+signeeId)
       .then(response => {
         console.log('Request Rejected:', response.data);
-        // You may want to update the UI or show a notification here
       })
       .catch(error => {
         console.error('Error rejecting request:', error);
-        // Handle error, update UI, or show an error notification
       });
   };
 
