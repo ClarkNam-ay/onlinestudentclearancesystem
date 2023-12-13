@@ -14,6 +14,42 @@ const dbStudentRegister = mysql.createConnection({
     database: "studentregister"
 });
 
+// Approve student request
+app.post('/signee/requests/approve/:signeeId', (req, res) => {
+    const requestId = req.params.signeeId;
+
+    // Assuming you have a table named 'student_requests' with a column 'status'
+    const approveRequestQuery = "UPDATE studentsignees SET status = 'approved' WHERE signeeId = ?";
+  
+    dbStudentRegister.query(approveRequestQuery, [requestId], (err, result) => {
+      if (err) {
+        console.error('Error approving request:', err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+  
+      console.log('Request approved successfully.');
+      return res.status(200).json({ success: true });
+    });
+});
+
+// Reject student request
+app.post('/signee/requests/reject/:signeeId', (req, res) => {
+    const requestId = req.params.signeeId;
+
+    // Assuming you have a table named 'student_requests' with a column 'status'
+    const approveRequestQuery = "UPDATE studentsignees SET status = 'reject' WHERE signeeId = ?";
+  
+    dbStudentRegister.query(approveRequestQuery, [requestId], (err, result) => {
+      if (err) {
+        console.error('Error reject request:', err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+  
+      console.log('Request reject successfully.');
+      return res.status(200).json({ success: true });
+    });
+});
+
 app.get('/signee/requests/pending/:signeeId', (req, res) => {
     const signeeId = req.params.signeeId; // Extract signeeId from the request parameters
 

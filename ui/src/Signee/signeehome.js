@@ -46,14 +46,36 @@ function Signeehome({Toggle}) {
       });
   }, [id]);
 
-  const handleApprove = (requestId) => {
-    console.log(`Approving request with ID: ${requestId}`);
-    // Implement the logic to update the request status to approved on the server
+  const handleApprove = () => {
+    const signeeId = id;
+    console.log(`Approving request with ID: ${signeeId}`);
+
+    // Send a request to the server to update the request status to 'approved'
+    axios.post("http://localhost:8082/signee/requests/approve/"+signeeId)
+      .then(response => {
+        console.log('Request Approved:', response.data);
+        // You may want to update the UI or show a notification here
+      })
+      .catch(error => {
+        console.error('Error approving request:', error);
+        // Handle error, update UI, or show an error notification
+      });
   };
 
-  const handleReject = (requestId) => {
-    console.log(`Rejecting request with ID: ${requestId}`);
-    // Implement the logic to update the request status to rejected on the server
+  const handleReject = () => {
+    const signeeId = id;
+    console.log(`Rejecting request with ID: ${signeeId}`);
+
+    // Send a request to the server to update the request status to 'rejected'
+    axios.post("http://localhost:8082/signee/requests/reject/"+signeeId)
+      .then(response => {
+        console.log('Request Rejected:', response.data);
+        // You may want to update the UI or show a notification here
+      })
+      .catch(error => {
+        console.error('Error rejecting request:', error);
+        // Handle error, update UI, or show an error notification
+      });
   };
 
   return (

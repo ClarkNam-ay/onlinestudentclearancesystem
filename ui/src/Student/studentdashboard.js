@@ -3,7 +3,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import './style.css'
 import { useNavigate } from 'react-router-dom'
 
-import PrintClearance from './printclearance'
 import SubmitClearReq from './studenthome'
 
 import { useSigneeData } from '../SigneeDataContext'
@@ -45,10 +44,8 @@ function Studentdashboard() {
     }, [user]);
 
       useEffect(() => {
-        // Check if the user is logged in
         if (!user || !user.username) {
-          // Redirect to login page
-          navigate('/'); // Adjust the route as needed
+          navigate('/');
         }
       }, [user, navigate]);
   
@@ -79,21 +76,15 @@ function Studentdashboard() {
                     </div>
                     <hr className='text-dark' />
                     <div className='list-group list-group-flush'>
-                        <button onClick={() => handleButtonClick('viewClearanceStatus')} className='list-group-item py-2'>
+                        <button onClick={() => handleButtonClick('submitClearance')} className='list-group-item py-2'>
                             <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
-                            <span>View Clearance Status</span>
-                        </button>
-                        <button onClick={() => handleButtonClick('printClearance')} className='list-group-item py-2'>
-                            <i className='bi bi-bar-chart-fill fs-5 me-3'></i>
-                            <span>Print Clearance</span>
+                            <span>Clearance Status</span>
                         </button>
                     </div>
                 </div>
             </div>}
             {toggle && <div className='col-4 col-md-2'></div>}
             <div className='col'>
-                 {/* Render the selected view based on the state */}
-            {selectedView === 'printClearance' && <PrintClearance Toggle={Toggle}/>}
             {selectedView === 'submitClearance' && <SubmitClearReq Toggle={Toggle}/>}
             {!selectedView && <SubmitClearReq Toggle={Toggle} />}
             </div>

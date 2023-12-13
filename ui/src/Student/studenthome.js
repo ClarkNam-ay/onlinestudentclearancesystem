@@ -57,6 +57,18 @@ function Studenthome({Toggle}) {
       .then(response => {
         console.log('Request sent successfully:', response.data);
         // You may want to update the UI or show a notification here
+
+        const updatedSignees = assignedSignees.map(signee => {
+        if (signee.id === assignedSigneeId) {
+          const updatedSignee = { ...signee, status: 'pending' }; // You may receive the actual status from the server response
+          console.log('Updated Signee:', updatedSignee);
+          return updatedSignee;
+          }
+          return signee;
+        });
+
+        setAssignedSignees(updatedSignees);
+        console.log('Updated Signees:', updatedSignees);
       })
       .catch(error => {
         console.error('Error sending request:', error);
@@ -78,6 +90,7 @@ function Studenthome({Toggle}) {
             <tr>
               <th>Signee Name</th>
               <th>Designation</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -87,6 +100,7 @@ function Studenthome({Toggle}) {
                 
                 <td>{assignedSignee.name}</td>
                 <td>{assignedSignee.designation}</td>
+                <td>{assignedSignee.status || 'Not requested'}</td>
                 <td>
                 <button
                 className="btn btn-primary custom-button"

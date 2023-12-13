@@ -40,10 +40,8 @@ function Signeedashboard() {
           }, [user]);
 
           useEffect(() => {
-            // Check if the user is logged in
             if (!user || !user.username) {
-              // Redirect to login page
-              navigate('/'); // Adjust the route as needed
+              navigate('/');
             }
           }, [user, navigate]);
     
