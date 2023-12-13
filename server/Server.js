@@ -76,16 +76,27 @@ app.post("/request/signee", (req, res) => {
     const { studentId, assignedSigneeId } = req.body;
   
     // Assuming you have a table named 'signee_requests' to store requests
-    const insertRequestQuery = "INSERT INTO studentsignees (studentId, signeeId) VALUES (?, ?)";
+    const insertRequestQuery = "INSERT INTO studentsignees (studentId, signeeId, status) VALUES (?, ?, 'pending')";
   
     dbStudentRegister.query(insertRequestQuery, [studentId, assignedSigneeId], (err, result) => {
       if (err) {
         console.error("Error inserting request into the database:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-  
-      console.log("Request inserted successfully.");
-      return res.status(200).json({ success: true });
+  // Assuming you have a column 'status' in your 'studentsignees' table
+        const getStatusQuery = "SELECT status FROM studentsignees WHERE signeeId = ?";
+
+        dbStudentRegister.query(getStatusQuery, [assignedSigneeId], (err, statusResult) => {
+            if (err) {
+                console.error('Error retrieving status:', err);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+
+            const status = statusResult[0].status;
+
+            console.log('Request approved successfully. Status:', status);
+            return res.status(200).json({ success: true, status });
+        });
     });
   });
 

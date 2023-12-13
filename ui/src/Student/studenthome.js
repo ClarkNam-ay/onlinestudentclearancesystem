@@ -44,36 +44,31 @@ function Studenthome({Toggle}) {
       });
   }, []);
 
-  const handleRequest = (assignedSigneeId) => {
+  const handleRequest = async assignedSigneeId => {
     console.log(`Requesting signee with ID: ${assignedSigneeId}`);
-  
-    // Assuming there's an endpoint to handle the request on the server
-    const requestBody = {
-      studentId: id,
-      assignedSigneeId: assignedSigneeId,
-    };
-  
-    axios.post('http://localhost:8082/request/signee', requestBody)
-      .then(response => {
-        console.log('Request sent successfully:', response.data);
-        // You may want to update the UI or show a notification here
 
-        const updatedSignees = assignedSignees.map(signee => {
-        if (signee.id === assignedSigneeId) {
-          const updatedSignee = { ...signee, status: 'pending' }; // You may receive the actual status from the server response
-          console.log('Updated Signee:', updatedSignee);
-          return updatedSignee;
-          }
-          return signee;
-        });
+    try {
+      const requestBody = {
+        studentId: id,
+        assignedSigneeId: assignedSigneeId,
+      };
 
-        setAssignedSignees(updatedSignees);
-        console.log('Updated Signees:', updatedSignees);
-      })
-      .catch(error => {
-        console.error('Error sending request:', error);
-        // Handle error, update UI, or show an error notification
-      });
+      const response = await axios.post('http://localhost:8082/request/signee', requestBody);
+      console.log('Request sent successfully:', response.data);
+
+      // Assuming the response includes the status
+      const { status } = response.data;
+
+      // Update the assignedSignees state with the new status
+      setAssignedSignees(prevState =>
+        prevState.map(signee =>
+          signee.id === assignedSigneeId ? { ...signee, status: status } : signee
+        )
+      );
+    } catch (error) {
+      console.error('Error sending request:', error);
+      // Handle error, update UI, or show an error notification
+    }
   };
   
 
@@ -100,7 +95,7 @@ function Studenthome({Toggle}) {
                 
                 <td>{assignedSignee.name}</td>
                 <td>{assignedSignee.designation}</td>
-                <td>{assignedSignee.status || 'Not requested'}</td>
+                <td>{assignedSignee.status || 'Pending'}</td>
                 <td>
                 <button
                 className="btn btn-primary custom-button"
