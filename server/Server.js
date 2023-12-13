@@ -18,7 +18,6 @@ const dbStudentRegister = mysql.createConnection({
 app.post('/signee/requests/approve/:signeeId', (req, res) => {
     const requestId = req.params.signeeId;
 
-    // Assuming you have a table named 'student_requests' with a column 'status'
     const approveRequestQuery = "UPDATE studentsignees SET status = 'approved' WHERE signeeId = ?";
   
     dbStudentRegister.query(approveRequestQuery, [requestId], (err, result) => {
@@ -36,7 +35,6 @@ app.post('/signee/requests/approve/:signeeId', (req, res) => {
 app.post('/signee/requests/reject/:signeeId', (req, res) => {
     const requestId = req.params.signeeId;
 
-    // Assuming you have a table named 'student_requests' with a column 'status'
     const approveRequestQuery = "UPDATE studentsignees SET status = 'reject' WHERE signeeId = ?";
   
     dbStudentRegister.query(approveRequestQuery, [requestId], (err, result) => {
@@ -50,10 +48,10 @@ app.post('/signee/requests/reject/:signeeId', (req, res) => {
     });
 });
 
+//Request Function
 app.get('/signee/requests/pending/:signeeId', (req, res) => {
-    const signeeId = req.params.signeeId; // Extract signeeId from the request parameters
+    const signeeId = req.params.signeeId; 
 
-    // Assuming you have a table named 'signee_requests' to store requests
     const selectRequestsQuery = `
       SELECT registerstudent.name, registerstudent.year_level, registerstudent.course, registerstudent.department
       FROM registerstudent
@@ -72,10 +70,10 @@ app.get('/signee/requests/pending/:signeeId', (req, res) => {
     });
   });
 
+  //Show who request
 app.post("/request/signee", (req, res) => {
     const { studentId, assignedSigneeId } = req.body;
   
-    // Assuming you have a table named 'signee_requests' to store requests
     const insertRequestQuery = "INSERT INTO studentsignees (studentId, signeeId, status) VALUES (?, ?, 'pending')";
   
     dbStudentRegister.query(insertRequestQuery, [studentId, assignedSigneeId], (err, result) => {
@@ -83,7 +81,7 @@ app.post("/request/signee", (req, res) => {
         console.error("Error inserting request into the database:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-  // Assuming you have a column 'status' in your 'studentsignees' table
+//Show Status
         const getStatusQuery = "SELECT status FROM studentsignees WHERE signeeId = ?";
 
         dbStudentRegister.query(getStatusQuery, [assignedSigneeId], (err, statusResult) => {
@@ -119,7 +117,7 @@ app.post('/studentregister', (req, res) => {
         return res.json(data);
     })
 })
-
+//Login API
 app.post('/StudentLogin', (req, res) => {
     const sql = "SELECT * FROM registerstudent WHERE `username` = ? AND `password` = ?";
     dbStudentRegister.query(sql, [req.body.username, req.body.password], (err, data) => {
@@ -140,6 +138,7 @@ app.post('/StudentLogin', (req, res) => {
     })
 })
 
+//Display Student Account
 app.get('/adminhome', (req, res) => {
     const sql = "SELECT * FROM registerstudent"
     dbStudentRegister.query(sql, (err, result) => {
@@ -148,6 +147,7 @@ app.get('/adminhome', (req, res) => {
     })
 })
 
+//Delete Account
 app.delete('/adminhome/delete/:id', (req, res) => {
     const sql = 'DELETE FROM registerstudent WHERE id=?';
     const id = req.params.id;
@@ -184,6 +184,7 @@ app.put('/viewstudentaccount/block/:id', (req, res) => {
     });
 });
 
+//unblock
 app.put('/viewstudentaccount/unblock/:id', (req, res) => {
     const { id } = req.params;
     const sqlUpdateStatus = 'UPDATE registerstudent SET blocked=? WHERE id=?';
@@ -197,6 +198,7 @@ app.put('/viewstudentaccount/unblock/:id', (req, res) => {
     });
 });
 
+//kuha sa username para profile
 app.get('/get-user/:username', (req, res) => {
     const { username } = req.params;
     const sql = "SELECT * FROM registerstudent WHERE `username` = ?";
@@ -215,9 +217,6 @@ app.get('/get-user/:username', (req, res) => {
   });
 
 
-
-
-
 //SigneeRegister Database
 const dbSigneeRegister = mysql.createConnection({
     host: "localhost",
@@ -226,10 +225,10 @@ const dbSigneeRegister = mysql.createConnection({
     database: "signeeregister"
 });
 
+//Assign signee
 app.post('/viewsigneeaccount/assign', (req, res) => {
     const { accountId, signeeId } = req.body;
 
-    // Assuming you have a table named 'accounts' with a column 'assignedSigneeId'
     const updateAccountSQL = "UPDATE registersignee SET accountSigneeId = ? WHERE id = ?";
     dbSigneeRegister.query(updateAccountSQL, [signeeId, accountId], (updateAccountErr, updateAccountResult) => {
         if (updateAccountErr) {
@@ -244,27 +243,24 @@ app.post('/viewsigneeaccount/assign', (req, res) => {
     });
 });
 
+//Assign signee to all student account
 app.get('/viewsigneeaccount/assigned/all', (req, res) => {
-    // Assuming you have a database table that tracks assigned signees
-    const sql = "SELECT * FROM registersignee WHERE `accountSigneeId` IS NOT NULL"; // Update with your actual table name
-  
-    // Execute the query to get all assigned signees
+    
+    const sql = "SELECT * FROM registersignee WHERE `accountSigneeId` IS NOT NULL"; 
+
     dbSigneeRegister.query(sql, (err, result) => {
       if (err) {
         console.error('Error fetching assigned signees:', err);
         return res.status(500).json({ error: 'Internal Server Error' });
       }
   
-      // Respond with the list of assigned signees
       res.json(result);
     });
 });
 
-
+//Unasssign
   app.put('/viewsigneeaccount/unassign/:id', (req, res) => {
     const signeeId = req.params.id;
-  
-    // Perform the unassignment logic here, update the database, etc.
   
     const sql = 'UPDATE registersignee SET accountSigneeId = NULL WHERE id = ?';
   
@@ -297,6 +293,7 @@ app.post('/signeeregister', (req, res) => {
     })
 })
 
+//Signee Login
 app.post('/SigneeLogin', (req, res) => {
     const sql = "SELECT * FROM registersignee WHERE `username` = ? AND `password` = ?";
     dbSigneeRegister.query(sql, [req.body.username, req.body.password], (err, data) => {
@@ -317,6 +314,7 @@ app.post('/SigneeLogin', (req, res) => {
     })
 })
 
+//Signee Account
 app.get('/viewsigneeaccount', (req, res) => {
     const sql = "SELECT * FROM registersignee"
     dbSigneeRegister.query(sql, (err, result) => {
@@ -325,6 +323,7 @@ app.get('/viewsigneeaccount', (req, res) => {
     })
 })
 
+//Delete
 app.delete('/viewsigneeaccount/delete/:id', (req, res) => {
     const sql = 'DELETE FROM registersignee WHERE id=?';
     const id = req.params.id;
@@ -361,6 +360,7 @@ app.put('/viewsigneeaccount/block/:id', (req, res) => {
     });
 });
 
+//Unblock
 app.put('/viewsigneeaccount/unblock/:id', (req, res) => {
     const { id } = req.params;
     const sqlUpdateStatus = 'UPDATE registersignee SET blocked=? WHERE id=?';
@@ -374,6 +374,7 @@ app.put('/viewsigneeaccount/unblock/:id', (req, res) => {
     });
 });
 
+//kuhaa username
 app.get('/get-signee-user/:username', (req, res) => {
     const { username } = req.params;
     const sql = "SELECT * FROM registersignee WHERE `username` = ?";
