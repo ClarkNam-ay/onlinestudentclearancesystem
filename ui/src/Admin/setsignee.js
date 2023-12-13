@@ -6,7 +6,8 @@ import axios from 'axios';
 
 function Setsignee({Toggle}) {
   const [assignedSignees, setAssignedSignees] = useState([]);
-  
+  const [notification, setNotification] = useState('');
+
 
   useEffect(() => {
     // Fetch assigned signee for all student accounts
@@ -29,6 +30,7 @@ function Setsignee({Toggle}) {
       .then(response => {
         // Update state by filtering out the removed signee
         setAssignedSignees(prevAssignedSignees => prevAssignedSignees.filter(signee => signee.id !== assignedSigneeId));
+        setNotification('Signee unassigned successfully');
         console.log('Signee removed successfully');
       })
       .catch(error => {
@@ -41,6 +43,7 @@ function Setsignee({Toggle}) {
         <AdminNav Toggle={Toggle}/>
 
         <div>
+        {notification && <div className="alert alert-success">{notification}</div>}
         <h2 className="p-3 bg-white">Assigned Signees</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">

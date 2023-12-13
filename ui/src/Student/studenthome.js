@@ -7,6 +7,7 @@ import { useSigneeData } from '../SigneeDataContext'
 
 function Studenthome({Toggle}) {
   const [assignedSignees, setAssignedSignees] = useState([]);
+  const [notification, setNotification] = useState('');
 
   const { user } = useSigneeData();
   const [username, setUsername] = useState('');
@@ -64,6 +65,7 @@ function Studenthome({Toggle}) {
           signee.id === assignedSigneeId ? { ...signee, status: status } : signee
         )
       );
+      setNotification('Request sent successfully');
     } catch (error) {
       console.error('Error sending request:', error);
     }
@@ -76,7 +78,7 @@ function Studenthome({Toggle}) {
         
         <div>
         
-         
+        {notification && <div className="alert alert-success">{notification}</div>}
         <h2 className="p-3 bg-white">Clearance</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">

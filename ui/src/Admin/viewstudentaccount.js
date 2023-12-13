@@ -6,6 +6,8 @@ import './adminhome.css'
 
 function Viewstudentaccount({Toggle}) {
 
+  const [notification, setNotification] = useState('');
+
     const [data, setData] = useState([])
   useEffect(()=> {
     axios.get('http://localhost:8082/adminhome')
@@ -17,6 +19,7 @@ function Viewstudentaccount({Toggle}) {
     axios.delete('http://localhost:8082/adminhome/delete/'+id)
     .then(() => {
       setData(prevData => prevData.filter(item => item.id !== id));
+      setNotification('Deleted successfully');
     })
     .catch(err => console.log(err));
   }
@@ -29,6 +32,7 @@ function Viewstudentaccount({Toggle}) {
           // Update the data, marking the specific item as blocked
           return prevData.map(item => (item.id === id ? { ...item, blocked: true } : item));
         });
+        setNotification('Blocked successfully');
       })
       .catch(err => console.log(err));
   };
@@ -39,6 +43,7 @@ function Viewstudentaccount({Toggle}) {
         setData(prevData => {
           return prevData.map(item => (item.id === id ? { ...item, blocked: false } : item));
         });
+        setNotification('Unblocked successfully');
       })
       .catch(err => console.log(err));
   };
@@ -49,6 +54,7 @@ function Viewstudentaccount({Toggle}) {
 
         <div>
           <div>
+          {notification && <div className="alert alert-success">{notification}</div>}
             <h2 className=" p-3 bg-white">Student Account</h2>
             <table className="table table-bordered table-striped">
               <thead className="thead-dark">

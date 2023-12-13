@@ -4,7 +4,8 @@ import axios from 'axios'
 
 function Viewsigneeaccount({Toggle}) {
   const [selectedData, setSelectedData] = useState([]);
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:8082/viewsigneeaccount')
@@ -18,6 +19,7 @@ function Viewsigneeaccount({Toggle}) {
     axios.delete('http://localhost:8082/viewsigneeaccount/delete/'+id)
     .then(() => {
       setData(prevData => prevData.filter(item => item.id !== id));
+      setNotification('Deleted successfully');
     })
     .catch(err => console.log(err));
   }
@@ -40,6 +42,7 @@ function Viewsigneeaccount({Toggle}) {
         signeeId: registersignee.id,
       })
       .then(response => {
+        setNotification('Signee assigned successfully');
         // Handle success, e.g., show a success message
         console.log(response.data.message);
       })
@@ -59,6 +62,7 @@ function Viewsigneeaccount({Toggle}) {
           // Update the data, marking the specific item as blocked
           return prevData.map(item => (item.id === id ? { ...item, blocked: true } : item));
         });
+        setNotification('Blocked successfully');
       })
       .catch(err => console.log(err));
   };
@@ -69,6 +73,7 @@ function Viewsigneeaccount({Toggle}) {
         setData(prevData => {
           return prevData.map(item => (item.id === id ? { ...item, blocked: false } : item));
         });
+        setNotification('Unblocked successfully');
       })
       .catch(err => console.log(err));
   };
@@ -79,6 +84,7 @@ function Viewsigneeaccount({Toggle}) {
 
         <div>
             <div>
+            {notification && <div className="alert alert-success">{notification}</div>}
                 <h2 className=" p-3 bg-white">Signee Account</h2>
                 <table className="table table-bordered table-striped">
               <thead className="thead-dark">

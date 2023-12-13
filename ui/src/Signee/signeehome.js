@@ -6,7 +6,7 @@ import { useSigneeData } from '../SigneeDataContext'
 
 
 function Signeehome({Toggle}) {
-  
+  const [notification, setNotification] = useState('');
   const [pendingRequests, setPendingRequests] = useState([]);
 
   const { user } = useSigneeData();
@@ -54,6 +54,7 @@ function Signeehome({Toggle}) {
     axios.post("http://localhost:8082/signee/requests/approve/"+signeeId)
       .then(response => {
         console.log('Request Approved:', response.data);
+        setNotification('Request approved successfully');
       })
       .catch(error => {
         console.error('Error approving request:', error);
@@ -68,6 +69,7 @@ function Signeehome({Toggle}) {
     axios.post("http://localhost:8082/signee/requests/reject/"+signeeId)
       .then(response => {
         console.log('Request Rejected:', response.data);
+        setNotification('Request rejected successfully');
       })
       .catch(error => {
         console.error('Error rejecting request:', error);
@@ -79,6 +81,7 @@ function Signeehome({Toggle}) {
         <SigneeNav Toggle={Toggle}/>
         
         <div>
+        {notification && <div className="alert alert-success">{notification}</div>}
         <h2 className="p-3 bg-white">Student Request</h2>
         <table className="table table-bordered table-striped">
           <thead className="thead-dark">
